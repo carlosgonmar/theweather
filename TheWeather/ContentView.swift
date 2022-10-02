@@ -5,48 +5,27 @@
 //  Created by Carlos González Martín on 30/9/22.
 //
 
+import MapKit
 import SwiftUI
-
-class MyData: ObservableObject {
-    
-    @Published var term: String = "Luxemburgo"
-    @Published var town: String = "Badajoz"
-    @Published var country: String = "LU"
-    @Published var latitude: Double = 0
-    @Published var longitude: Double = 0
-    @Published var weather: String = "Clouds"
-    @Published var description: String = "overcast clouds"
-    @Published var icon: String = "04n"
-    @Published var north_town: String = "Badajoz"
-    @Published var south_town: String = "Badajoz"
-    @Published var east_town: String = "Badajoz"
-    @Published var west_town: String = "Badajoz"
-    @Published var hot_record: Float = 25.0
-    @Published var hot_record_town: String = "Badajoz, ES"
-    @Published var humidity_record: Int = 16
-    @Published var humidity_record_town: String = "Badajoz, ES"
-    @Published var rain_record: Float = 5
-    @Published var rain_record_town: String = "Badajoz, ES"
-    @Published var wind_record: Float = 23
-    @Published var wind_record_town: String = "Badajoz, ES"
-    
-}
 
 struct ContentView: View {
     
     
     @State var showAlertSheet: Bool = false
+    @State var latitude: Double = 40.41835349621259
+    @State var longitude: Double = -3.6870897507878024
     @EnvironmentObject var errorHandling: ErrorHandling
-    @StateObject private var myData = MyData()
+    @StateObject var principalData = PrincipalDataModel()
     
     var body: some View {
         
         VStack(alignment: .center) {
             Spacer()
-            CurrentBoxView(myData: myData)
+            MapView()
+            //CurrentBoxView()
             Spacer()
-            SearchView(myData: myData, showAlertSheet: $showAlertSheet)
-            WeatherView(myData: myData)
+            SearchView(showAlertSheet: $showAlertSheet)
+            WeatherView()
         }
         .frame(
             maxWidth: .infinity,
@@ -57,7 +36,7 @@ struct ContentView: View {
         .alert(isPresented: $showAlertSheet, content: {
                     return Alert(title: Text("No Internet Connection"), message: Text("Please enable Wifi or Celluar data"), dismissButton: .default(Text("Cancel")))
                 })
-
+        .environmentObject(principalData)
     
     }
 }

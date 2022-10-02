@@ -14,7 +14,7 @@ struct Country: Identifiable, Hashable {
 
 struct CountryView: View {
     
-    @ObservedObject var myData: MyData
+    @EnvironmentObject var principalData: PrincipalDataModel
     
     let countries = Locale.Region.isoRegions.filter({ region in
         return !CharacterSet(charactersIn: region.identifier).isSubset(of: CharacterSet.decimalDigits)
@@ -22,15 +22,9 @@ struct CountryView: View {
     
     @State var selectedCountry: Country?
     
-    
-    init(myData: MyData) {
-        selectedCountry = countries.first(where: {$0.id == myData.country})
-        self.myData = myData
-    }
-    
     var body: some View {
         
-        Picker("Country", selection: $selectedCountry) {
+        Picker("Country", selection: $principalData.country) {
             ForEach(countries) {
                 Text($0.name)
                     .tag(Optional($0))
@@ -39,7 +33,7 @@ struct CountryView: View {
         }.pickerStyle(.menu)
             .onChange(of: selectedCountry) { selected in
                 if let cntry = selected {
-                    self.myData.country=cntry.id
+                    self.principalData.country=cntry.id
                 }
             }
             .accentColor(.white)
@@ -54,6 +48,6 @@ struct CountryView: View {
 
 struct CountryView_Previews: PreviewProvider {
     static var previews: some View {
-        CountryView(myData: MyData())
+        CountryView()
     }
 }

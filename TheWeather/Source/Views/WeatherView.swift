@@ -9,20 +9,20 @@ import SwiftUI
 
 struct WeatherView: View {
     
-    @ObservedObject var myData: MyData
+    @EnvironmentObject var principalData: PrincipalDataModel
     
     var body: some View {
         VStack (alignment: .center){
             VStack (){
                 HStack (){
-                    RecordBoxView(recordImage: "Temp", recordValue: String(format: "%.1fºC", myData.hot_record), recordTown: myData.hot_record_town)
-                    RecordBoxView(recordImage: "Humidity", recordValue: String(format: "%i%", myData.humidity_record), recordTown: myData.humidity_record_town)
+                    RecordBoxView(recordImage: "Temp", recordValue: String(format: "%.1fºC", principalData.hot_record), recordTown: principalData.hot_record_town)
+                    RecordBoxView(recordImage: "Humidity", recordValue: String(format: "%i%", principalData.humidity_record), recordTown: principalData.humidity_record_town)
                 }
             }
             VStack (){
                 HStack (){
-                    RecordBoxView(recordImage: "Rain", recordValue: String(format: "%.2f", myData.rain_record), recordTown: myData.rain_record_town)
-                    RecordBoxView(recordImage: "Wind", recordValue: String(format: "%.1f", myData.wind_record), recordTown: myData.wind_record_town)
+                    RecordBoxView(recordImage: "Rain", recordValue: String(format: "%.2f", principalData.rain_record), recordTown: principalData.rain_record_town)
+                    RecordBoxView(recordImage: "Wind", recordValue: String(format: "%.1f", principalData.wind_record), recordTown: principalData.wind_record_town)
                 }
             }
         }
@@ -34,6 +34,6 @@ struct WeatherView: View {
 
 struct WeatherView_Previews: PreviewProvider {
     static var previews: some View {
-        WeatherView(myData: MyData())
+        WeatherView()
     }
 }

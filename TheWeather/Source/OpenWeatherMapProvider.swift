@@ -25,14 +25,18 @@ final class OpenWeatherMapProvider {
     
     static let shared = OpenWeatherMapProvider()
     private let kBaseUrl = "https://api.openweathermap.org"
-    private var kAccesToken = "asd"
+    private var kAccesToken = ""
     private let kUnits = "metric"
     private let kEarthRKm: Double = 6378.137
     private let kDefaultDistanceKm: Double = 200
     
-    func getCurrentWeatherData(term: String, country: String, success: @escaping (_ currentData: Current) -> (), failure: @escaping (_ error: Error) -> ()) {
+    init(){
         
         kAccesToken = Bundle.main.object(forInfoDictionaryKey: "OpenWeatherMapToken") as? String ?? ""
+        
+    }
+    
+    func getCurrentWeatherData(term: String, country: String, success: @escaping (_ currentData: Current) -> (), failure: @escaping (_ error: Error) -> ()) {
         
         var currentData: Current = Current()
         getGeopoint(term: term, country: country) { place in
@@ -64,26 +68,24 @@ final class OpenWeatherMapProvider {
                     self.getTownFrom(coordinates: newCoordinates) { town in
                         
                         switch position {
-                            case Positions.North:
-                                currentData.north_town = town.isEmpty ? "-" : town
-                            case Positions.South:
-                                currentData.south_town = town.isEmpty ? "-" : town
-                            case Positions.East:
-                                currentData.east_town = town.isEmpty ? "-" : town
-                            case Positions.West:
-                                currentData.west_town = town.isEmpty ? "-" : town
-                            }
+                        case Positions.North:
+                            currentData.north_town = town.isEmpty ? "-" : town
+                            currentData.north_latitude = newCoordinates.latitude
+                            currentData.north_longitude = newCoordinates.longitude
+                        case Positions.South:
+                            currentData.south_town = town.isEmpty ? "-" : town
+                            currentData.south_latitude = newCoordinates.latitude
+                            currentData.south_longitude = newCoordinates.longitude
+                        case Positions.East:
+                            currentData.east_town = town.isEmpty ? "-" : town
+                            currentData.east_latitude = newCoordinates.latitude
+                            currentData.east_longitude = newCoordinates.longitude
+                        case Positions.West:
+                            currentData.west_town = town.isEmpty ? "-" : town
+                            currentData.west_latitude = newCoordinates.latitude
+                            currentData.west_longitude = newCoordinates.longitude
+                        }
                         if !town.isEmpty {
-                            switch position {
-                            case Positions.North:
-                                currentData.north_town = town
-                            case Positions.South:
-                                currentData.south_town = town
-                            case Positions.East:
-                                currentData.east_town = town
-                            case Positions.West:
-                                currentData.west_town = town
-                            }
                             // Get initial town measures
                             self.getWeather(coordinates: newCoordinates) { weather in
                                 
@@ -110,7 +112,7 @@ final class OpenWeatherMapProvider {
                                 failure(error)
                             }
                         }
-
+                        
                     } failure: { error in
                         failure(error)
                     }
@@ -127,46 +129,17 @@ final class OpenWeatherMapProvider {
         
     }
     
-    private func checkIfIsZipCode(term: String) -> Bool{
-     
-        let regex = try! NSRegularExpression(pattern: "^\\d\\d\\d\\d\\d$")
-        let range = NSRange(location: 0, length: term.utf16.count)
-        return (regex.firstMatch(in: term, options: [], range: range) != nil)
-        
-    }
-    
-    private func calculateNewCoordinates(coordinates: Coordinates, position: Positions) -> Coordinates{
-        
-        var newCoordinates = coordinates
-        switch position {
-        case Positions.North:
-            newCoordinates.latitude = (coordinates.latitude + Double(kDefaultDistanceKm / kEarthRKm) * (180 / Double.pi))
-        case Positions.South:
-            newCoordinates.latitude = (coordinates.latitude + Double(kDefaultDistanceKm / kEarthRKm) * (-180 / Double.pi))
-        case Positions.East:
-            newCoordinates.longitude = (kDefaultDistanceKm / kEarthRKm) * (180 / Double.pi)
-            newCoordinates.longitude = (newCoordinates.longitude / cos(coordinates.latitude * (Double.pi / 180)))
-            newCoordinates.longitude = (newCoordinates.longitude + coordinates.longitude)
-        case Positions.West:
-            newCoordinates.longitude = ((kDefaultDistanceKm / kEarthRKm) * (-180 / Double.pi))
-            newCoordinates.longitude = (newCoordinates.longitude / cos(coordinates.latitude * (Double.pi / -180)))
-            newCoordinates.longitude = (newCoordinates.longitude + coordinates.longitude)
-        }
-        return newCoordinates
-        
-    }
-    
-    private func getWeather(coordinates: Coordinates, success: @escaping (_ weather: Weather) -> (), failure: @escaping (_ error: Error) -> ()) {
+    private func getWeather(coordinates: Coordinates, success: @escaping (_ weather: OWM_Weather) -> (), failure: @escaping (_ error: Error) -> ()) {
         
         let url = "\(kBaseUrl)/data/3.0/onecall"
         let parameters: [String:Any] = ["lat": coordinates.latitude, "lon": coordinates.longitude, "units": kUnits, "exclude": "daily,minutely", "appid": kAccesToken]
-        AF.request(url, method: .get, parameters: parameters).responseDecodable(of: Weather.self){ response in
+        AF.request(url, method: .get, parameters: parameters).responseDecodable(of: OWM_Weather.self){ response in
             
             switch response.result {
             case .success(let value):
-                var weather:Weather = value
+                var weather:OWM_Weather = value
                 // Value rain it's optional. We set by default to 0
-                weather.current.rain = (weather.current.rain ?? Weather.WeatherCurrent.WeatherCurrentRain(inLastHour: 0.0))
+                weather.current.rain = (weather.current.rain ?? OWM_Weather.OWM_WeatherCurrent.OWM_WeatherCurrentRain(inLastHour: 0.0))
                 success(weather)
                 
             case .failure(let error):
@@ -181,7 +154,7 @@ final class OpenWeatherMapProvider {
         
         let url = "\(kBaseUrl)/geo/1.0/reverse"
         let parameters: [String:Any] = ["lat": coordinates.latitude, "lon": coordinates.longitude, "limit": 1, "appid": kAccesToken]
-        AF.request(url, method: .get, parameters: parameters).responseDecodable(of: [Reverse].self) { response in
+        AF.request(url, method: .get, parameters: parameters).responseDecodable(of: [OWM_GeolocationReverse].self) { response in
             
             switch response.result {
             case .success(let value):
@@ -197,7 +170,7 @@ final class OpenWeatherMapProvider {
         
     }
     
-    private func getGeopoint(term: String, country: String, success: @escaping (_ place: Place) -> (), failure: @escaping (_ error: Error) -> ()) {
+    private func getGeopoint(term: String, country: String, success: @escaping (_ geolocation: OWM_Geolocation) -> (), failure: @escaping (_ error: Error) -> ()) {
         
         
         let isZip = checkIfIsZipCode(term: term)
@@ -205,21 +178,21 @@ final class OpenWeatherMapProvider {
             
             let url = "\(kBaseUrl)/data/2.5/weather"
             let parameters = ["zip": "\(term),\(country)", "appid": kAccesToken]
-            AF.request(url, method: .get, parameters: parameters).validate(statusCode: 200..<300).responseDecodable(of: GeolocationByZip.self) { response in
-                 
-                 switch response.result {
-                 case .success(let value):
-                     success(Place(name: value.name, country: value.sys.country, lat: value.coord.lat, lon: value.coord.lon))
-                 case .failure(let error):
-                     failure(self.connectionErrors(error: error))
-                 }
-             }
+            AF.request(url, method: .get, parameters: parameters).validate(statusCode: 200..<300).responseDecodable(of: OWM_GeolocationByZip.self) { response in
+                
+                switch response.result {
+                case .success(let value):
+                    success(OWM_Geolocation(name: value.name, country: value.sys.country, lat: value.coord.lat, lon: value.coord.lon))
+                case .failure(let error):
+                    failure(self.connectionErrors(error: error))
+                }
+            }
             
         }else{
             
             let url = "\(kBaseUrl)/geo/1.0/direct"
             let parameters = ["q": "\(term),\(country)", "limit": "1", "appid": kAccesToken]
-            AF.request(url, method: .get, parameters: parameters).validate(statusCode: 200..<300).responseDecodable(of: [Place].self) { response in
+            AF.request(url, method: .get, parameters: parameters).validate(statusCode: 200..<300).responseDecodable(of: [OWM_Geolocation].self) { response in
                 
                 switch response.result {
                 case .success(let value):
@@ -245,6 +218,38 @@ final class OpenWeatherMapProvider {
         }else{
             return CustomErrors.openWeatherMapConnectionError
         }
+        
+    }
+    
+    private func checkIfIsZipCode(term: String) -> Bool{
+        
+        // Check via regex if the incoming text has the format of a postcode, which is composed of exactly 5 digits.
+        let regex = try! NSRegularExpression(pattern: "^\\d\\d\\d\\d\\d$")
+        let range = NSRange(location: 0, length: term.utf16.count)
+        return (regex.firstMatch(in: term, options: [], range: range) != nil)
+        
+    }
+    
+    private func calculateNewCoordinates(coordinates: Coordinates, position: Positions) -> Coordinates{
+        
+        // Calculate coordinates from a latitude and longitude in the given
+        // direction (north, south, east, west) using the default distance defined in kDefaultDistanceKm
+        var newCoordinates = coordinates
+        switch position {
+        case Positions.North:
+            newCoordinates.latitude = (coordinates.latitude + Double(kDefaultDistanceKm / kEarthRKm) * (180 / Double.pi))
+        case Positions.South:
+            newCoordinates.latitude = (coordinates.latitude + Double(kDefaultDistanceKm / kEarthRKm) * (-180 / Double.pi))
+        case Positions.East:
+            newCoordinates.longitude = (kDefaultDistanceKm / kEarthRKm) * (180 / Double.pi)
+            newCoordinates.longitude = (newCoordinates.longitude / cos(coordinates.latitude * (Double.pi / 180)))
+            newCoordinates.longitude = (newCoordinates.longitude + coordinates.longitude)
+        case Positions.West:
+            newCoordinates.longitude = ((kDefaultDistanceKm / kEarthRKm) * (-180 / Double.pi))
+            newCoordinates.longitude = (newCoordinates.longitude / cos(coordinates.latitude * (Double.pi / -180)))
+            newCoordinates.longitude = (newCoordinates.longitude + coordinates.longitude)
+        }
+        return newCoordinates
         
     }
     

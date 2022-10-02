@@ -9,12 +9,12 @@ import SwiftUI
 
 struct CurrentBoxView: View {
     
-    @ObservedObject var myData: MyData
+    @EnvironmentObject var principalData: PrincipalDataModel
     
     var body: some View {
         VStack {
             VStack {
-                Text(myData.north_town)
+                Text(principalData.north_town)
                     .multilineTextAlignment(.center)
                     .foregroundColor(.white)
                     .font(.system(size: 12))
@@ -28,7 +28,7 @@ struct CurrentBoxView: View {
             )
             HStack {
                 VStack {
-                    Text(myData.west_town)
+                    Text(principalData.west_town)
                         .multilineTextAlignment(.center)
                         .foregroundColor(.white)
                         .font(.system(size: 12))
@@ -42,7 +42,7 @@ struct CurrentBoxView: View {
                     alignment: .leading
                 )
                 VStack (){
-                    if(!myData.icon.isEmpty){ AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(myData.icon)@2x.png"))
+                    if(!principalData.icon.isEmpty){ AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(principalData.icon)@2x.png"))
                             .frame(width: 100, height: 100)
                         
                     }else{
@@ -51,11 +51,11 @@ struct CurrentBoxView: View {
                             .frame(width: 100, height: 100)
                         
                     }
-                    Text(myData.description)
+                    Text(principalData.description)
                         .multilineTextAlignment(.center)
                         .foregroundColor(.white)
                         .font(.system(size: 16))
-                    Text(myData.town)
+                    Text(principalData.town)
                         .multilineTextAlignment(.center)
                         .foregroundColor(.white)
                         .font(.system(size: 12))
@@ -67,7 +67,7 @@ struct CurrentBoxView: View {
                     alignment: .center
                 )
                 VStack {
-                    Text(myData.east_town)
+                    Text(principalData.east_town)
                         .multilineTextAlignment(.center)
                         .foregroundColor(.white)
                         .font(.system(size: 12))
@@ -85,7 +85,7 @@ struct CurrentBoxView: View {
                 alignment: .center
             )
             VStack {
-                Text(myData.south_town)
+                Text(principalData.south_town)
                     .multilineTextAlignment(.center)
                     .foregroundColor(.white)
                     .font(.system(size: 12))
@@ -101,6 +101,6 @@ struct CurrentBoxView: View {
 
 struct CurrentBoxView_Previews: PreviewProvider {
     static var previews: some View {
-        CurrentBoxView(myData: MyData())
+        CurrentBoxView()
     }
 }
