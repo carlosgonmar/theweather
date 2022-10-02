@@ -30,8 +30,8 @@ class MyData: ObservableObject {
 
 struct ContentView: View {
     
-    @ObservedObject var monitor = Network()
-    @State private var showAlertSheet = false
+    
+    @State var showAlertSheet: Bool = false
     @EnvironmentObject var errorHandling: ErrorHandling
     @StateObject private var myData = MyData()
     
@@ -41,7 +41,7 @@ struct ContentView: View {
             Spacer()
             CurrentBoxView(currentImage: myData.icon, currentDescription: myData.description, currentTown: myData.town)
             Spacer()
-            SearchView(myData: myData)
+            SearchView(myData: myData, showAlertSheet: $showAlertSheet)
             WeatherView(myData: myData)
         }
         .frame(
@@ -51,9 +51,6 @@ struct ContentView: View {
         )
         .background(Color(red: 121/255, green: 104/255, blue: 134/255))
         .alert(isPresented: $showAlertSheet, content: {
-                    if monitor.isConnected {
-                        return Alert(title: Text("Success!"), message: Text("The network request can be performed"), dismissButton: .default(Text("OK")))
-                    }
                     return Alert(title: Text("No Internet Connection"), message: Text("Please enable Wifi or Celluar data"), dismissButton: .default(Text("Cancel")))
                 })
 
