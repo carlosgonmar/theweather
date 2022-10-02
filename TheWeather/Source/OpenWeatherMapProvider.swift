@@ -25,13 +25,14 @@ final class OpenWeatherMapProvider {
     
     static let shared = OpenWeatherMapProvider()
     private let kBaseUrl = "https://api.openweathermap.org"
-    private let kAccesToken = "27a58985550bc24b7c8aabf87d53b631"
+    private var kAccesToken = "asd"
     private let kUnits = "metric"
     private let kEarthRKm: Double = 6378.137
     private let kDefaultDistanceKm: Double = 200
     
-    
     func getCurrentWeatherData(term: String, country: String, success: @escaping (_ currentData: Current) -> (), failure: @escaping (_ error: Error) -> ()) {
+        
+        kAccesToken = Bundle.main.object(forInfoDictionaryKey: "OpenWeatherMapToken") as? String ?? ""
         
         var currentData: Current = Current()
         getGeopoint(term: term, country: country) { place in
@@ -52,7 +53,7 @@ final class OpenWeatherMapProvider {
                 currentData.hot_record_town = currentData.town
                 currentData.humidity_record = weather.current.humidity
                 currentData.humidity_record_town = currentData.town
-                currentData.rain_record = 0
+                currentData.rain_record = weather.current.rain!.inLastHour
                 currentData.rain_record_town = currentData.town
                 currentData.wind_record = weather.current.wind_speed
                 currentData.wind_record_town = currentData.town
@@ -62,7 +63,27 @@ final class OpenWeatherMapProvider {
                     let newCoordinates = self.calculateNewCoordinates(coordinates: myCoordinates, position: position)
                     self.getTownFrom(coordinates: newCoordinates) { town in
                         
+                        switch position {
+                            case Positions.North:
+                                currentData.north_town = town.isEmpty ? "-" : town
+                            case Positions.South:
+                                currentData.south_town = town.isEmpty ? "-" : town
+                            case Positions.East:
+                                currentData.east_town = town.isEmpty ? "-" : town
+                            case Positions.West:
+                                currentData.west_town = town.isEmpty ? "-" : town
+                            }
                         if !town.isEmpty {
+                            switch position {
+                            case Positions.North:
+                                currentData.north_town = town
+                            case Positions.South:
+                                currentData.south_town = town
+                            case Positions.East:
+                                currentData.east_town = town
+                            case Positions.West:
+                                currentData.west_town = town
+                            }
                             // Get initial town measures
                             self.getWeather(coordinates: newCoordinates) { weather in
                                 
@@ -74,8 +95,8 @@ final class OpenWeatherMapProvider {
                                     currentData.humidity_record = weather.current.humidity
                                     currentData.humidity_record_town = town
                                 }
-                                if 0 > currentData.rain_record {
-                                    currentData.rain_record = 0
+                                if weather.current.rain!.inLastHour > currentData.rain_record {
+                                    currentData.rain_record = weather.current.rain!.inLastHour
                                     currentData.rain_record_town = town
                                 }
                                 if weather.current.wind_speed > currentData.wind_record {
@@ -143,11 +164,13 @@ final class OpenWeatherMapProvider {
             
             switch response.result {
             case .success(let value):
-                let weather:Weather = value
+                var weather:Weather = value
+                // Value rain it's optional. We set by default to 0
+                weather.current.rain = (weather.current.rain ?? Weather.WeatherCurrent.WeatherCurrentRain(inLastHour: 0.0))
                 success(weather)
                 
             case .failure(let error):
-                failure(error)
+                failure(self.connectionErrors(error: error))
             }
             
         }
@@ -168,7 +191,7 @@ final class OpenWeatherMapProvider {
                     success("")
                 }
             case .failure(let error):
-                failure(error)
+                failure(self.connectionErrors(error: error))
             }
         }
         
@@ -182,13 +205,13 @@ final class OpenWeatherMapProvider {
             
             let url = "\(kBaseUrl)/data/2.5/weather"
             let parameters = ["zip": "\(term),\(country)", "appid": kAccesToken]
-             AF.request(url, method: .get, parameters: parameters).responseDecodable(of: GeolocationByZip.self) { response in
+            AF.request(url, method: .get, parameters: parameters).validate(statusCode: 200..<300).responseDecodable(of: GeolocationByZip.self) { response in
                  
                  switch response.result {
                  case .success(let value):
                      success(Place(name: value.name, country: value.sys.country, lat: value.coord.lat, lon: value.coord.lon))
                  case .failure(let error):
-                     failure(error)
+                     failure(self.connectionErrors(error: error))
                  }
              }
             
@@ -196,7 +219,7 @@ final class OpenWeatherMapProvider {
             
             let url = "\(kBaseUrl)/geo/1.0/direct"
             let parameters = ["q": "\(term),\(country)", "limit": "1", "appid": kAccesToken]
-            AF.request(url, method: .get, parameters: parameters).responseDecodable(of: [Place].self) { response in
+            AF.request(url, method: .get, parameters: parameters).validate(statusCode: 200..<300).responseDecodable(of: [Place].self) { response in
                 
                 switch response.result {
                 case .success(let value):
@@ -206,12 +229,22 @@ final class OpenWeatherMapProvider {
                         failure(CustomErrors.notFoundTown)
                     }
                 case .failure(let error):
-                    failure(error)
+                    failure(self.connectionErrors(error: error))
                 }
             }
             
         }
         
+        
+    }
+    
+    private func connectionErrors(error: AFError) -> CustomErrors {
+        
+        if error.responseCode ?? 400 == 401 {
+            return CustomErrors.openWeatherMapConnectinUnauthorised
+        }else{
+            return CustomErrors.openWeatherMapConnectionError
+        }
         
     }
     

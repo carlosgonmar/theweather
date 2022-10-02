@@ -8,12 +8,15 @@
 import Foundation
 
 enum CustomErrors: LocalizedError {
+    case openWeatherMapConnectinUnauthorised
     case openWeatherMapConnectionError
     case notFoundTown
     case missingTown
 
     var errorDescription: String? {
         switch self {
+        case .openWeatherMapConnectinUnauthorised:
+            return "OpenWeatherMap does not authorise the use of its API."
         case .openWeatherMapConnectionError:
             return "We are having difficulties connecting to OpenWeatherMap, please try again later."
         case .notFoundTown:

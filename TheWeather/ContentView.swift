@@ -9,14 +9,18 @@ import SwiftUI
 
 class MyData: ObservableObject {
     
-    @Published var term: String = "29620"
+    @Published var term: String = "Luxemburgo"
     @Published var town: String = "Badajoz"
-    @Published var country: String = "ES"
+    @Published var country: String = "LU"
     @Published var latitude: Double = 0
     @Published var longitude: Double = 0
     @Published var weather: String = "Clouds"
     @Published var description: String = "overcast clouds"
     @Published var icon: String = "04n"
+    @Published var north_town: String = "Badajoz"
+    @Published var south_town: String = "Badajoz"
+    @Published var east_town: String = "Badajoz"
+    @Published var west_town: String = "Badajoz"
     @Published var hot_record: Float = 25.0
     @Published var hot_record_town: String = "Badajoz, ES"
     @Published var humidity_record: Int = 16
@@ -39,7 +43,7 @@ struct ContentView: View {
         
         VStack(alignment: .center) {
             Spacer()
-            CurrentBoxView(currentImage: myData.icon, currentDescription: myData.description, currentTown: myData.town)
+            CurrentBoxView(myData: myData)
             Spacer()
             SearchView(myData: myData, showAlertSheet: $showAlertSheet)
             WeatherView(myData: myData)

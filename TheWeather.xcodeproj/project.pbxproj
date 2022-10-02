@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		162B579F28E8AA9500BAC1E1 /* GeolocationByZip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B579E28E8AA9500BAC1E1 /* GeolocationByZip.swift */; };
 		162B57A328E8B12B00BAC1E1 /* CountryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B57A228E8B12B00BAC1E1 /* CountryView.swift */; };
-		162B57A728E97E9A00BAC1E1 /* Reach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B57A628E97E9900BAC1E1 /* Reach.swift */; };
+		162B57AA28E9851000BAC1E1 /* Reach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B57A928E9851000BAC1E1 /* Reach.swift */; };
 		162D33FF28E84B760092B50A /* Reverse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162D33FE28E84B760092B50A /* Reverse.swift */; };
 		162D340128E859F60092B50A /* RecordBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162D340028E859F60092B50A /* RecordBoxView.swift */; };
 		162D340328E86CD20092B50A /* CurrentBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162D340228E86CD20092B50A /* CurrentBoxView.swift */; };
@@ -51,7 +51,8 @@
 /* Begin PBXFileReference section */
 		162B579E28E8AA9500BAC1E1 /* GeolocationByZip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeolocationByZip.swift; sourceTree = "<group>"; };
 		162B57A228E8B12B00BAC1E1 /* CountryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryView.swift; sourceTree = "<group>"; };
-		162B57A628E97E9900BAC1E1 /* Reach.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reach.swift; path = "../../Reach-master/Reach-swift5.0/Reach.swift"; sourceTree = "<group>"; };
+		162B57A928E9851000BAC1E1 /* Reach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reach.swift; sourceTree = "<group>"; };
+		162B57AD28E99F3600BAC1E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		162D33FE28E84B760092B50A /* Reverse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reverse.swift; sourceTree = "<group>"; };
 		162D340028E859F60092B50A /* RecordBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordBoxView.swift; sourceTree = "<group>"; };
 		162D340228E86CD20092B50A /* CurrentBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentBoxView.swift; sourceTree = "<group>"; };
@@ -101,13 +102,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		162D33FD28E84B520092B50A /* OpenWeatherMap */ = {
+		162B57A828E984E900BAC1E1 /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				1634905328E7515200FAB0FC /* Models */,
+				1634905828E75E2C00FAB0FC /* Views */,
 				1634905028E7404800FAB0FC /* OpenWeatherMapProvider.swift */,
+				162D340428E88CCE0092B50A /* ErrorHandling.swift */,
+				162B57A928E9851000BAC1E1 /* Reach.swift */,
 			);
-			path = OpenWeatherMap;
+			path = Source;
 			sourceTree = "<group>";
 		};
 		1634901728E73CC100FAB0FC = {
@@ -133,14 +137,11 @@
 		1634902228E73CC100FAB0FC /* TheWeather */ = {
 			isa = PBXGroup;
 			children = (
+				162B57AD28E99F3600BAC1E1 /* Info.plist */,
 				1634902328E73CC100FAB0FC /* TheWeatherApp.swift */,
 				1634902528E73CC100FAB0FC /* ContentView.swift */,
-				162D340628E891BF0092B50A /* CustomErrors.swift */,
-				162D340428E88CCE0092B50A /* ErrorHandling.swift */,
-				162B57A628E97E9900BAC1E1 /* Reach.swift */,
 				1634902728E73CC200FAB0FC /* Assets.xcassets */,
-				1634905828E75E2C00FAB0FC /* Views */,
-				162D33FD28E84B520092B50A /* OpenWeatherMap */,
+				162B57A828E984E900BAC1E1 /* Source */,
 				1634902928E73CC200FAB0FC /* Preview Content */,
 			);
 			path = TheWeather;
@@ -174,6 +175,7 @@
 		1634905328E7515200FAB0FC /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				162D340628E891BF0092B50A /* CustomErrors.swift */,
 				1634905428E7581900FAB0FC /* Weather.swift */,
 				1634905D28E77C9D00FAB0FC /* Place.swift */,
 				1634905F28E7A5FE00FAB0FC /* Current.swift */,
@@ -337,7 +339,7 @@
 				162D340128E859F60092B50A /* RecordBoxView.swift in Sources */,
 				162D340328E86CD20092B50A /* CurrentBoxView.swift in Sources */,
 				162D340728E891BF0092B50A /* CustomErrors.swift in Sources */,
-				162B57A728E97E9A00BAC1E1 /* Reach.swift in Sources */,
+				162B57AA28E9851000BAC1E1 /* Reach.swift in Sources */,
 				162D340528E88CCF0092B50A /* ErrorHandling.swift in Sources */,
 				1634905128E7404800FAB0FC /* OpenWeatherMapProvider.swift in Sources */,
 				1634906028E7A5FE00FAB0FC /* Current.swift in Sources */,
@@ -508,6 +510,7 @@
 				DEVELOPMENT_TEAM = 23FV273TGK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TheWeather/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -537,6 +540,7 @@
 				DEVELOPMENT_TEAM = 23FV273TGK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TheWeather/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

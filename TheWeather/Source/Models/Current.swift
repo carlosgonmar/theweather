@@ -14,6 +14,10 @@ struct Current {
     var weather: String = ""
     var description: String = ""
     var icon: String = ""
+    var north_town: String = "-"
+    var south_town: String = "-"
+    var east_town: String = "-"
+    var west_town: String = "-"
     var hot_record: Float = 0
     var hot_record_town: String = ""
     var humidity_record: Int = 0

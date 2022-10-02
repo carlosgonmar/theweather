@@ -20,7 +20,13 @@ struct CountryView: View {
         return !CharacterSet(charactersIn: region.identifier).isSubset(of: CharacterSet.decimalDigits)
     }) .compactMap {  Country(id: $0.identifier, name: Locale.current.localizedString(forRegionCode:$0.identifier)!) }
     
-    @State var selectedCountry: Country? = Country(id:"ES",name: "España")
+    @State var selectedCountry: Country?
+    
+    
+    init(myData: MyData) {
+        selectedCountry = countries.first(where: {$0.id == myData.country})
+        self.myData = myData
+    }
     
     var body: some View {
         
