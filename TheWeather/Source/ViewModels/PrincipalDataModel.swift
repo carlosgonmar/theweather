@@ -51,8 +51,8 @@ class PrincipalDataModel: ObservableObject {
     }
     @Published var mapRegion: MKCoordinateRegion = MKCoordinateRegion()
     let mapSpan = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
-    let initialLatitudinalMetres: Double = 500000
-    let initialLongitudinalMetres: Double = 500000
+    let initialLatitudinalMetres: Double = 700000
+    let initialLongitudinalMetres: Double = 700000
     
     init() {
         let locations = [
@@ -72,7 +72,18 @@ class PrincipalDataModel: ObservableObject {
     
     public func getWeatherFromGeolocation(location: Location) {
         
-        debugPrint("Hola")
+        OpenWeatherMapProvider.shared.getCurrentWeatherDataFromCoordinates(town: location.name, myCoordinates: Coordinates(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)) { currentData in
+            
+            self.valuesAssignaments(currentData: currentData)
+            self.fillLocations()
+            self.showCurrentLocation()
+
+        } failure: { error in
+            
+            debugPrint(error)
+            self.errorHandling.handle(error: error)
+            
+        }
         
     }
     
@@ -113,8 +124,6 @@ class PrincipalDataModel: ObservableObject {
     }
     
     private func valuesAssignaments(currentData: Current){
-        
-        
         
         town = currentData.town
         latitude = currentData.latitude

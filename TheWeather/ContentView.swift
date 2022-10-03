@@ -27,6 +27,7 @@ struct ContentView: View {
             SearchView(showAlertSheet: $showAlertSheet)
             WeatherView()
         }
+        .ignoresSafeArea()
         .frame(
             maxWidth: .infinity,
             maxHeight: .infinity,

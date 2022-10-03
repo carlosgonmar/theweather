@@ -38,12 +38,33 @@ final class OpenWeatherMapProvider {
     
     func getCurrentWeatherData(term: String, country: String, success: @escaping (_ currentData: Current) -> (), failure: @escaping (_ error: Error) -> ()) {
         
-        var currentData: Current = Current()
         getGeopoint(term: term, country: country) { place in
             
             let myCoordinates = Coordinates(latitude: place.lat, longitude: place.lon)
+            self.getCurrentWeatherDataFromCoordinates(town: place.name, myCoordinates: myCoordinates) { currentData in
+                
+                var response = currentData
+                response.town = place.name
+                success(currentData)
+                
+            } failure: { error in
+                failure(error)
+                
+            }
             
-            currentData.town = place.name
+            
+        } failure: { error in
+            failure(error)
+            
+        }
+        
+    }
+    
+    func getCurrentWeatherDataFromCoordinates(town: String, myCoordinates: Coordinates, success: @escaping (_ currentData: Current) -> (), failure: @escaping (_ error: Error) -> ()) {
+        
+       
+            var currentData: Current = Current()
+            currentData.town = town
             currentData.latitude = myCoordinates.latitude
             currentData.longitude = myCoordinates.longitude
             
@@ -85,7 +106,6 @@ final class OpenWeatherMapProvider {
                             currentData.west_latitude = newCoordinates.latitude
                             currentData.west_longitude = newCoordinates.longitude
                         }
-                        if !town.isEmpty {
                             // Get initial town measures
                             self.getWeather(coordinates: newCoordinates) { weather in
                                 
@@ -111,7 +131,6 @@ final class OpenWeatherMapProvider {
                             } failure: { error in
                                 failure(error)
                             }
-                        }
                         
                     } failure: { error in
                         failure(error)
@@ -121,11 +140,6 @@ final class OpenWeatherMapProvider {
             } failure: { error in
                 failure(error)
             }
-            
-        } failure: { error in
-            failure(error)
-            
-        }
         
     }
     

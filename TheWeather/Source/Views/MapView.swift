@@ -11,17 +11,26 @@ import SwiftUI
 struct MapView: View {
     
     @EnvironmentObject var principalData: PrincipalDataModel
-
+    
     var body: some View {
         Map(coordinateRegion: $principalData.mapRegion,
             annotationItems: principalData.locations,
             annotationContent: { location in
-            MapAnnotation(coordinate: location.coordinate) {
-                LocationMapAnnotationView(name: location.name)
+                MapAnnotation(coordinate: location.coordinate) {
+                    Button(location.name) {
+                        principalData.getWeatherFromGeolocation(location: location)
+                    }
+                    .padding(5)
+                    .background(Color(red: 121/255, green: 104/255, blue: 134/255))
+                    .cornerRadius(5)
+                    .foregroundColor(Color.white)
+                    .font(.system(size: 10))
+                }
             }
-        }
         )
-            .ignoresSafeArea()
+        .frame(
+            maxHeight: .infinity
+        )
     }
     
 }

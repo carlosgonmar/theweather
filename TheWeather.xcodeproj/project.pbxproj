@@ -27,7 +27,6 @@
 		1634905A28E75E5E00FAB0FC /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1634905928E75E5E00FAB0FC /* SearchView.swift */; };
 		1634905C28E75E7000FAB0FC /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1634905B28E75E7000FAB0FC /* WeatherView.swift */; };
 		1634906028E7A5FE00FAB0FC /* Current.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1634905F28E7A5FE00FAB0FC /* Current.swift */; };
-		16BBA15128EA162800DFEAA6 /* LocationMapAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16BBA15028EA162800DFEAA6 /* LocationMapAnnotationView.swift */; };
 		16BBA15628EA1C4900DFEAA6 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16BBA15528EA1C4900DFEAA6 /* Location.swift */; };
 		16BBA15828EA220100DFEAA6 /* PrincipalDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16BBA15728EA220100DFEAA6 /* PrincipalDataModel.swift */; };
 /* End PBXBuildFile section */
@@ -73,7 +72,6 @@
 		1634905928E75E5E00FAB0FC /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		1634905B28E75E7000FAB0FC /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
 		1634905F28E7A5FE00FAB0FC /* Current.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Current.swift; sourceTree = "<group>"; };
-		16BBA15028EA162800DFEAA6 /* LocationMapAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMapAnnotationView.swift; sourceTree = "<group>"; };
 		16BBA15528EA1C4900DFEAA6 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		16BBA15728EA220100DFEAA6 /* PrincipalDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrincipalDataModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -195,7 +193,6 @@
 				162D340228E86CD20092B50A /* CurrentBoxView.swift */,
 				162B57A228E8B12B00BAC1E1 /* CountryView.swift */,
 				162B57B628E9FAE200BAC1E1 /* MapView.swift */,
-				16BBA15028EA162800DFEAA6 /* LocationMapAnnotationView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -345,7 +342,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				162B57A328E8B12B00BAC1E1 /* CountryView.swift in Sources */,
-				16BBA15128EA162800DFEAA6 /* LocationMapAnnotationView.swift in Sources */,
 				1634902628E73CC100FAB0FC /* ContentView.swift in Sources */,
 				162B57B528E9F57600BAC1E1 /* OpenWeatherMapModel.swift in Sources */,
 				162D340128E859F60092B50A /* RecordBoxView.swift in Sources */,
