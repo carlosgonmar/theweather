@@ -15,14 +15,14 @@ struct WeatherView: View {
         VStack (alignment: .center){
             VStack (){
                 HStack (){
-                    RecordBoxView(recordImage: "Temp", recordValue: String(format: "%.1fºC", principalData.hot_record), recordTown: principalData.hot_record_town)
-                    RecordBoxView(recordImage: "Humidity", recordValue: String(format: "%i%%", principalData.humidity_record), recordTown: principalData.humidity_record_town)
+                    RecordBoxView(recordImage: "Temp", recordValue: String(format: "%.1fºC", principalData.dataToPrint.hot_record), recordTown: principalData.dataToPrint.hot_record_town)
+                    RecordBoxView(recordImage: "Humidity", recordValue: String(format: "%i%%", principalData.dataToPrint.humidity_record), recordTown: principalData.dataToPrint.humidity_record_town)
                 }
             }
             VStack (){
                 HStack (){
-                    RecordBoxView(recordImage: "Rain", recordValue: String(format: "%.2fmm", principalData.rain_record), recordTown: principalData.rain_record_town)
-                    RecordBoxView(recordImage: "Wind", recordValue: String(format: "%.1fkm/h", principalData.wind_record), recordTown: principalData.wind_record_town)
+                    RecordBoxView(recordImage: "Rain", recordValue: String(format: "%.2fmm", principalData.dataToPrint.rain_record), recordTown: principalData.dataToPrint.rain_record_town)
+                    RecordBoxView(recordImage: "Wind", recordValue: String(format: "%.1fkm/h", principalData.dataToPrint.wind_record), recordTown: principalData.dataToPrint.wind_record_town)
                 }
             }
         }

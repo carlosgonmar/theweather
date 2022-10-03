@@ -36,7 +36,7 @@ final class OpenWeatherMapProvider {
         
     }
     
-    func getCurrentWeatherData(term: String, country: String, success: @escaping (_ currentData: Current) -> (), failure: @escaping (_ error: Error) -> ()) {
+    func getCurrentWeatherData(term: String, country: String, success: @escaping (_ currentData: DataToPrint) -> (), failure: @escaping (_ error: Error) -> ()) {
         
         getGeopoint(term: term, country: country) { place in
             
@@ -60,10 +60,10 @@ final class OpenWeatherMapProvider {
         
     }
     
-    func getCurrentWeatherDataFromCoordinates(town: String, myCoordinates: Coordinates, success: @escaping (_ currentData: Current) -> (), failure: @escaping (_ error: Error) -> ()) {
+    func getCurrentWeatherDataFromCoordinates(town: String, myCoordinates: Coordinates, success: @escaping (_ currentData: DataToPrint) -> (), failure: @escaping (_ error: Error) -> ()) {
         
        
-            var currentData: Current = Current()
+            var currentData: DataToPrint = DataToPrint()
             currentData.town = town
             currentData.latitude = myCoordinates.latitude
             currentData.longitude = myCoordinates.longitude

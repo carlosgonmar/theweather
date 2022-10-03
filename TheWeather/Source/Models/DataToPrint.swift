@@ -7,12 +7,14 @@
 
 import Foundation
 
-struct Current {
-    var town: String = ""
-    var latitude: Double = 0
-    var longitude: Double = 0
-    var weather: String = ""
-    var description: String = ""
+struct DataToPrint {
+    var term: String = ""
+    var town: String = "Madrid"
+    var country: String = "ES"
+    var latitude: Double = 40.41835349621259
+    var longitude: Double = -3.6870897507878024
+    var weather: String = "Clouds"
+    var description: String = "overcast clouds"
     var icon: String = ""
     var north_town: String = "-"
     var north_latitude: Double = 0

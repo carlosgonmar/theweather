@@ -16,7 +16,8 @@ struct SearchView: View {
     var body: some View {
         
         HStack {
-            TextField("Search your city", text: $principalData.term)
+            TextField("Search your city", text: $principalData.dataToPrint.term)
+                
                 .keyboardType(.webSearch)
                 .disableAutocorrection(true)
                 .padding(5)
@@ -28,9 +29,9 @@ struct SearchView: View {
                     if Reach().isConnected() {
                         showAlertSheet = true;
                     }else{
-                        if principalData.term.count >= 1 {
+                        if principalData.dataToPrint.term.count >= 1 {
                             
-                            OpenWeatherMapProvider.shared.getCurrentWeatherData(term: principalData.term, country: principalData.country) { currentData in
+                            OpenWeatherMapProvider.shared.getCurrentWeatherData(term: principalData.dataToPrint.term, country: principalData.dataToPrint.country) { currentData in
                                 
                                 principalData.valuesAssignaments(currentData: currentData)
 

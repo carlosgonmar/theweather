@@ -24,7 +24,7 @@ struct CountryView: View {
     
     var body: some View {
         
-        Picker("Country", selection: $principalData.country) {
+        Picker("Country", selection: $principalData.dataToPrint.country) {
             ForEach(countries) {
                 Text($0.name)
                     .tag(Optional($0))
@@ -33,7 +33,7 @@ struct CountryView: View {
         }.pickerStyle(.menu)
             .onChange(of: selectedCountry) { selected in
                 if let cntry = selected {
-                    self.principalData.country=cntry.id
+                    self.principalData.dataToPrint.country=cntry.id
                 }
             }
             .accentColor(.white)
