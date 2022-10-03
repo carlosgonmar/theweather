@@ -20,20 +20,18 @@ struct ContentView: View {
     var body: some View {
         
         VStack(alignment: .center) {
-            Spacer()
             MapView()
-            //CurrentBoxView()
             Spacer()
             SearchView(showAlertSheet: $showAlertSheet)
             WeatherView()
         }
+        .background(Color(red: 121/255, green: 104/255, blue: 134/255))
         .ignoresSafeArea()
         .frame(
             maxWidth: .infinity,
             maxHeight: .infinity,
             alignment: .bottom
         )
-        .background(Color(red: 121/255, green: 104/255, blue: 134/255))
         .alert(isPresented: $showAlertSheet, content: {
                     return Alert(title: Text("No Internet Connection"), message: Text("Please enable Wifi or Celluar data"), dismissButton: .default(Text("Cancel")))
                 })

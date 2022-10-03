@@ -10,7 +10,7 @@ import SwiftUI
 struct SearchView: View {
     
     @EnvironmentObject var errorHandling: ErrorHandling
-    @EnvironmentObject var principalData: PrincipalDataModel
+    @EnvironmentObject private var principalData: PrincipalDataModel
     @Binding var showAlertSheet: Bool
     
     var body: some View {
@@ -30,7 +30,16 @@ struct SearchView: View {
                     }else{
                         if principalData.term.count >= 1 {
                             
-                            principalData.getWeatherFromString()
+                            OpenWeatherMapProvider.shared.getCurrentWeatherData(term: principalData.term, country: principalData.country) { currentData in
+                                
+                                principalData.valuesAssignaments(currentData: currentData)
+
+                            } failure: { error in
+                                
+                                self.errorHandling.handle(error: error)
+                                
+                            }
+                            
                             
                         }
                     }

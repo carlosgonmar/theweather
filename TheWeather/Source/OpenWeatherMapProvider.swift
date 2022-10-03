@@ -82,55 +82,57 @@ final class OpenWeatherMapProvider {
                 currentData.rain_record_town = currentData.town
                 currentData.wind_record = weather.current.wind_speed
                 currentData.wind_record_town = currentData.town
-                success(currentData)
+                
                 // Get 4 close towns
                 for position in Positions.allCases {
                     let newCoordinates = self.calculateNewCoordinates(coordinates: myCoordinates, position: position)
                     self.getTownFrom(coordinates: newCoordinates) { town in
                         
+                        let townToPrint = town.isEmpty ? "-" : town
                         switch position {
                         case Positions.North:
-                            currentData.north_town = town.isEmpty ? "-" : town
+                            currentData.north_town = townToPrint
                             currentData.north_latitude = newCoordinates.latitude
                             currentData.north_longitude = newCoordinates.longitude
                         case Positions.South:
-                            currentData.south_town = town.isEmpty ? "-" : town
+                            currentData.south_town = townToPrint
                             currentData.south_latitude = newCoordinates.latitude
                             currentData.south_longitude = newCoordinates.longitude
                         case Positions.East:
-                            currentData.east_town = town.isEmpty ? "-" : town
+                            debugPrint(newCoordinates)
+                            currentData.east_town = townToPrint
                             currentData.east_latitude = newCoordinates.latitude
                             currentData.east_longitude = newCoordinates.longitude
                         case Positions.West:
-                            currentData.west_town = town.isEmpty ? "-" : town
+                            currentData.west_town = townToPrint
                             currentData.west_latitude = newCoordinates.latitude
                             currentData.west_longitude = newCoordinates.longitude
                         }
-                            // Get initial town measures
-                            self.getWeather(coordinates: newCoordinates) { weather in
-                                
-                                if weather.current.temp > currentData.hot_record {
-                                    currentData.hot_record = weather.current.temp
-                                    currentData.hot_record_town = town
-                                }
-                                if weather.current.humidity > currentData.humidity_record {
-                                    currentData.humidity_record = weather.current.humidity
-                                    currentData.humidity_record_town = town
-                                }
-                                if weather.current.rain!.inLastHour > currentData.rain_record {
-                                    currentData.rain_record = weather.current.rain!.inLastHour
-                                    currentData.rain_record_town = town
-                                }
-                                if weather.current.wind_speed > currentData.wind_record {
-                                    currentData.wind_record = weather.current.wind_speed
-                                    currentData.wind_record_town = town
-                                }
-                                success(currentData)
-                                
-                                
-                            } failure: { error in
-                                failure(error)
+                        // Get initial town measures
+                        self.getWeather(coordinates: newCoordinates) { weather in
+                            
+                            if weather.current.temp > currentData.hot_record {
+                                currentData.hot_record = weather.current.temp
+                                currentData.hot_record_town = townToPrint
                             }
+                            if weather.current.humidity > currentData.humidity_record {
+                                currentData.humidity_record = weather.current.humidity
+                                currentData.humidity_record_town = townToPrint
+                            }
+                            if weather.current.rain!.inLastHour > currentData.rain_record {
+                                currentData.rain_record = weather.current.rain!.inLastHour
+                                currentData.rain_record_town = townToPrint
+                            }
+                            if weather.current.wind_speed > currentData.wind_record {
+                                currentData.wind_record = weather.current.wind_speed
+                                currentData.wind_record_town = townToPrint
+                            }
+                            success(currentData)
+                            
+                            
+                        } failure: { error in
+                            failure(error)
+                        }
                         
                     } failure: { error in
                         failure(error)
@@ -198,7 +200,11 @@ final class OpenWeatherMapProvider {
                 case .success(let value):
                     success(OWM_Geolocation(name: value.name, country: value.sys.country, lat: value.coord.lat, lon: value.coord.lon))
                 case .failure(let error):
-                    failure(self.connectionErrors(error: error))
+                    if(error.responseCode == 404){
+                        failure(CustomErrors.notFoundTown)
+                    }else{
+                        failure(self.connectionErrors(error: error))
+                    }
                 }
             }
             

@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct TheWeatherApp: App {
+    @StateObject private var principalData = PrincipalDataModel()
     var body: some Scene {
         WindowGroup {
             ContentView()
