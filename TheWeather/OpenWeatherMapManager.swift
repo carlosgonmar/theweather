@@ -25,9 +25,12 @@ final class OpenWeatherMapManager {
     
     private func connectionErrors(error: AFError) -> CustomError {
         
-        if error.responseCode ?? 400 == 401 {
+        switch error.responseCode {
+        case 401:
             return CustomError.openWeatherMapConnectinUnauthorised
-        }else{
+        case 404:
+            return CustomError.notFoundTown
+        default:
             return CustomError.openWeatherMapConnectionError
         }
         
@@ -255,7 +258,8 @@ final class OpenWeatherMapManager {
         if checkIfIsZipCode(term: query) {
             
             let url = "\(kBaseUrl)/data/2.5/weather"
-            let parameters = ["zip": "\(query)","limit": "1", "appid": kAccesToken]
+            var zip = query.replacingOccurrences(of: " ", with: "")
+            let parameters = ["zip": zip,"limit": "1", "appid": kAccesToken]
             AF.request(url, method: .get, parameters: parameters).validate(statusCode: 200..<300).responseDecodable(of: OWM_GeolocationByZip.self) { response in
                 
                 switch response.result {
@@ -263,7 +267,9 @@ final class OpenWeatherMapManager {
                     let place = Place(name: value.name, country: value.sys.country, latitude: value.coord.lat, longitude: value.coord.lon)
                     completion(.success(place))
                 case .failure(let error):
+                    
                     completion(.failure(self.connectionErrors(error: error)))
+                    
                 }
                 
             }
@@ -272,6 +278,7 @@ final class OpenWeatherMapManager {
             
             let url = "\(kBaseUrl)/geo/1.0/direct"
             let parameters = ["q": "\(query)","limit": "1", "appid": kAccesToken]
+            print("Q => \(query)")
             AF.request(url, method: .get, parameters: parameters).validate(statusCode: 200..<300).responseDecodable(of: [OWM_Geolocation].self) { response in
                 
                 switch response.result {
@@ -307,7 +314,9 @@ final class OpenWeatherMapManager {
                 let place = Place(name: value.name, country: value.sys.country, latitude: value.coord.lat, longitude: value.coord.lon)
                 completion(.success(place))
             case .failure(let error):
+                
                 completion(.failure(self.connectionErrors(error: error)))
+                
             }
             
         }

@@ -157,13 +157,31 @@
                                     <constraint firstItem="K4M-aF-4XW" firstAttribute="top" secondItem="oED-C2-Nuz" secondAttribute="bottom" constant="8" id="yQW-9N-EJ8"/>
                                 </constraints>
                             </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6lt-Bi-cEk">
+                                <rect key="frame" x="0.0" y="358" width="320" height="200"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="u6C-RH-AaY">
+                                        <rect key="frame" x="150" y="90" width="20" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </activityIndicatorView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="FwR-xy-mtZ"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="320" id="KiP-4i-zG9"/>
+                                    <constraint firstAttribute="height" constant="200" id="gi5-cg-BrU"/>
+                                    <constraint firstAttribute="width" constant="320" id="wku-VR-Waa"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="F6w-gT-1oK" secondAttribute="trailing" constant="16" id="8ba-gd-I3N"/>
                             <constraint firstItem="zZd-P7-2Vv" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="CUD-sw-N3j"/>
+                            <constraint firstItem="6lt-Bi-cEk" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="HKV-SF-KIo"/>
                             <constraint firstAttribute="bottom" secondItem="Xwp-Ly-69c" secondAttribute="bottom" constant="10" id="KhA-uZ-cRI"/>
+                            <constraint firstAttribute="bottom" secondItem="6lt-Bi-cEk" secondAttribute="bottom" constant="10" id="QY4-AP-dI5"/>
                             <constraint firstItem="zZd-P7-2Vv" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="jPw-c7-eXN"/>
                             <constraint firstItem="F6w-gT-1oK" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="15" id="mS1-DW-KQx"/>
                             <constraint firstAttribute="bottom" secondItem="zZd-P7-2Vv" secondAttribute="bottom" id="mgi-ys-9oW"/>
@@ -182,6 +200,7 @@
                         <outlet property="searchTextView" destination="F6w-gT-1oK" id="at0-2R-BYc"/>
                         <outlet property="tempTownLabel" destination="oED-C2-Nuz" id="Z8V-vU-Ymb"/>
                         <outlet property="tempValueLabel" destination="X2E-r6-11z" id="mfV-sj-64e"/>
+                        <outlet property="watingView" destination="6lt-Bi-cEk" id="3rT-nO-u8u"/>
                         <outlet property="windTownLabel" destination="NmI-Ny-cDc" id="6Tx-wV-AEN"/>
                         <outlet property="windValueLabel" destination="K4M-aF-4XW" id="7L1-Eu-1ar"/>
                     </connections>

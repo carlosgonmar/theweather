@@ -24,6 +24,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIAlertViewDelegate
     
     @IBOutlet weak var searchTextView: UITextField!
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var watingView: UIView!
     @IBOutlet weak var containerRecordsView: UIView!
     @IBOutlet weak var tempValueLabel: UILabel!
     @IBOutlet weak var tempTownLabel: UILabel!
@@ -59,7 +60,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIAlertViewDelegate
         mapView.isScrollEnabled = false
         mapView.isUserInteractionEnabled = true
         
-        // Container
+        // Containers
+        watingView.isHidden = true
+        watingView.layer.cornerRadius=10
         containerRecordsView.layer.cornerRadius=10
         containerRecordsView.isHidden = true
     }
@@ -72,6 +75,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIAlertViewDelegate
             self.showErrorAlert(error: "Please enable internet settings")
         default:
             if !query.isEmpty {
+                watingView.isHidden = false
+                containerRecordsView.isHidden = true
                 OpenWeatherMapManager.shared.getTheWeatherInfo(query: query) { result in
                     switch result{
                     case .success(let newWeatherInfo):
@@ -82,6 +87,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIAlertViewDelegate
                     case .failure(let error):
                         
                         self.showErrorAlert(error: "\(error)")
+                        self.watingView.isHidden = true
                         
                     }
                 }
@@ -111,6 +117,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIAlertViewDelegate
         addAnnotations()
         selectPinAvailable = true
         updateMeasures()
+        watingView.isHidden = true
+        containerRecordsView.isHidden = false
         
     }
     
@@ -172,6 +180,8 @@ extension ViewController: MKMapViewDelegate {
         let annotation = view.annotation as? MyPointAnnotation
         if let place = annotation?.place {
             selectPinAvailable = false
+            watingView.isHidden = false
+            containerRecordsView.isHidden = true
             OpenWeatherMapManager.shared.getTheWeatherInfoFromPlace(place: place) { result in
                 switch result{
                 case .success(let newWeatherInfo):
@@ -180,7 +190,11 @@ extension ViewController: MKMapViewDelegate {
                         self.updateMap()
                     }
                 case .failure(let error):
+                    
+                    self.showErrorAlert(error: "\(error)")
                     self.selectPinAvailable = true
+                    self.watingView.isHidden = true
+                    
                 }
             }
         }

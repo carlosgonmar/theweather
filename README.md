@@ -10,5 +10,4 @@ OpenWeatherMapToken: your-openweathermap-api-token
 
 **Considerations:**
 
-- A countries select has been added. The zip-code search was returning too random results, mostly related to the USA.
-- I added this line to commit something to be rejected.
+- The zip-code search was returning too random results. The only way to ensure the correct results it's add the country with the format "00000,ES".
